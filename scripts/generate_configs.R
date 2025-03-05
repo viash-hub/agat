@@ -200,8 +200,8 @@ out <- map(pl_files, function(pl_file) {
   ) |>
     mutate(
       jaccard = overlap_mat[matching],
-      name = map_chr(names_parser, sort_get_longest),
-      alternatives = map2(names_parser, name, setdiff)
+      name = map_chr(names_doc, sort_get_longest),
+      alternatives = map2(names_doc, name, setdiff)
     )
 
   list(
@@ -217,10 +217,14 @@ args <- map_dfr(out, "args") |>
     desc_lc = str_to_lower(desc),
     has_default = grepl("\\[default:", desc_lc),
     has_example = grepl("example", desc_lc),
-    type = case_when(
-      grepl("integer", desc_lc) ~ "integer",
-      grepl("float", desc_lc) ~ "float",
+    inferred_type = case_when(
       grepl("file", desc_lc) ~ "file",
+      type == "s" ~ "string",
+      type == "i" ~ "integer",
+      type == "f" ~ "float",
+      type == "!" | is.na(type) ~ "boolean_true",
+      grepl("integer", desc_lc) ~ "integer",
+      grepl("float|double", desc_lc) ~ "double",
       grepl("string", desc_lc) ~ "string",
       grepl("boolean|bolean", desc_lc) ~ "boolean",
       TRUE ~ "unknown"
@@ -229,3 +233,107 @@ args <- map_dfr(out, "args") |>
     output = grepl("output", desc_lc) | grepl("output", desc_lc)
   ) |>
   select(-desc_lc)
+
+pwalk(
+  metadata,
+  function(
+    name,
+    description,
+    synopsis,
+    options,
+    feedback,
+    component_name,
+    ...
+  ) {
+    args_ <-
+      pmap(
+        args |>
+          filter(
+            component_name == !!component_name,
+            !name %in% c("--help", "-v")
+          ),
+        function(
+          inferred_type,
+          desc,
+          name,
+          alternatives,
+          default,
+          type,
+          is_multiple,
+          output,
+          ...
+        ) {
+          out <- list(
+            name = name,
+            type = inferred_type,
+            description = desc
+          )
+          if (inferred_type != "boolean_true") {
+            out$required <- type != "!" &&
+              (is.na(default) || default == "undef")
+          }
+          if (length(alternatives) > 0) {
+            out$alternatives <- alternatives
+          }
+          if (is_multiple) {
+            out$multiple <- TRUE
+          }
+          if (output) {
+            out$direction <- "output"
+          }
+          out
+        }
+      )
+
+    config <- list(
+      name = component_name,
+      description = description,
+      usage = synopsis,
+      links = list(
+        homepage = "https://agat.readthedocs.io",
+        documentation = paste0(
+          "https://agat.readthedocs.io/en/latest/tools/",
+          component_name,
+          ".html"
+        ),
+        issue_tracker = "https://github.com/NBISweden/AGAT/issues",
+        repository = "https://github.com/NBISweden/AGAT"
+      ),
+      references = list(
+        doi = "10.5281/zenodo.3552717"
+      ),
+      license = "GPL-3.0",
+      requirements = list(
+        commands = list(name)
+      ),
+      arguments = args_,
+      resources = list(
+        list(
+          type = "bash_script",
+          path = "script.sh"
+        )
+      ),
+      engines = list(
+        list(
+          type = "docker",
+          image = "quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0",
+          setup = list(
+            list(
+              type = "docker",
+              run = "agat --version | sed 's/AGAT\\s\\(.*\\)/agat: \"\\1\"/' > /var/software_versions.txt"
+            )
+          )
+        )
+      ),
+      runners = list(
+        list(type = "executable"),
+        list(type = "nextflow")
+      )
+    )
+    config_path <- paste0("src/", component_name, "/config.vsh.yaml")
+    if (!dir.exists(dirname(config_path))) {
+      dir.create(dirname(config_path), recursive = TRUE)
+    }
+    yaml::write_yaml(config, file = config_path)
+  }
+)
