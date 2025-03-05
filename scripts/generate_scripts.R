@@ -70,7 +70,7 @@ walk(config_files, function(config_file) {
     "",
     unset_flags_vec,
     "# run command",
-    paste0(head(command_vec, -1), " \\\\"),
+    paste0(head(command_vec, -1), " \\"),
     tail(command_vec, 1)
   )
 

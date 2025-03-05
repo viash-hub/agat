@@ -221,7 +221,7 @@ args <- map_dfr(out, "args") |>
       grepl("file", desc_lc) ~ "file",
       type == "s" ~ "string",
       type == "i" ~ "integer",
-      type == "f" ~ "float",
+      type == "f" ~ "double",
       type == "!" | is.na(type) ~ "boolean_true",
       grepl("integer", desc_lc) ~ "integer",
       grepl("float|double", desc_lc) ~ "double",
@@ -229,8 +229,7 @@ args <- map_dfr(out, "args") |>
       grepl("boolean|bolean", desc_lc) ~ "boolean",
       TRUE ~ "unknown"
     ),
-    is_multiple = grepl("multiple", desc_lc),
-    output = grepl("output", desc_lc) | grepl("output", desc_lc)
+    output = grepl("output", desc_lc)
   ) |>
   select(-desc_lc)
 
@@ -259,7 +258,6 @@ pwalk(
           alternatives,
           default,
           type,
-          is_multiple,
           output,
           ...
         ) {
@@ -270,13 +268,11 @@ pwalk(
           )
           if (inferred_type != "boolean_true") {
             out$required <- type != "!" &&
+              name != "--config" &&
               (is.na(default) || default == "undef")
           }
           if (length(alternatives) > 0) {
             out$alternatives <- alternatives
-          }
-          if (is_multiple) {
-            out$multiple <- TRUE
           }
           if (output) {
             out$direction <- "output"
