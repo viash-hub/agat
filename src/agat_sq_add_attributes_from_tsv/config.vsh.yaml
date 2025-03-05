@@ -1,0 +1,77 @@
+name: agat_sq_add_attributes_from_tsv
+description: "The purpose of the script is to add information from a tsv/csv file
+  to the attributes of a gff file (9th column).\ne.g. an attribute looks like this
+  in a GFF3 file: tag=value1,value2 \nThe first line of the tsv/csv file must contain
+  the headers (corresponding to an attribute tag in the GFF/GTF file),\nwhile the
+  other lines contain the values (corresponding to an attribute value in the GFF/GTF
+  file).\nThe first column is used to synchronize information between the tsv file
+  and the GFF/GTF file. In other words, \nit's used to determine which feature we're
+  going to add attributes to.\nThe other columns will be added as attribute in the
+  GFF/GTF file. The header becomes the tag for the new attribute, \nand the value
+  is that defined for the corresponding feature line. \n(If the tag already exists,
+  we append the value only if the value doesn't already exist).\n\n--- example ---\n\n*
+  input.tsv:\nID\tannot_type1\ngene1\tanot_x\ncds1\tanot_y\n\n* input gff:\nchr1\tirgsp\tgene\t1000\t2000\t.\t+\t.\tID=gene1\nchr1\tirgsp\tCDS\t2983\t3268\t.\t+\t.\tID=cds1\n\n*
+  output.gff:\nchr1\tirgsp\tgene\t1000\t2000\t.\t+\t.\tID=gene1;annot_type1=anot_x\nchr1\tirgsp\tCDS\t2983\t3268\t.\t+\t.\tID=cds1;annot_type1=anot_y\n\n---
+  example2 ---\n\n* input.tsv:\ngene_id\tannot_type1\ngene1\tanot_x\ncds1\tanot_y\n\n*
+  input gff:\nchr1\tirgsp\tgene\t1000\t2000\t.\t+\t.\tgene_id=gene1\nchr1\tirgsp\tCDS\t2983\t3268\t.\t+\t.\tgene_id=cds1\n\n*
+  output.gff:\nchr1\tirgsp\tgene\t1000\t2000\t.\t+\t.\tgene_id=gene1;annot_type1=anot_x\nchr1\tirgsp\tCDS\t2983\t3268\t.\t+\t.\tgene_id=cds1;annot_type1=anot_y"
+usage: |-
+  agat_sq_add_attributes_from_tsv.pl --gff input.gff --tsv input.tsv [ -o output.gff3 ]
+  agat_sq_add_attributes_from_tsv.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sq_add_attributes_from_tsv.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sq_add_attributes_from_tsv.pl
+arguments:
+- name: --gff
+  type: file
+  description: 'STRING: Input GTF/GFF file.'
+  required: yes
+- name: --tsv
+  type: file
+  description: 'STRING: Input tsv file'
+  required: yes
+- name: --csv
+  type: file
+  description: 'BOLEAN: Inform the script that the tsv input file is actually a csv
+    (coma-separated).'
+  required: no
+- name: --verbose
+  type: boolean_true
+  description: 'BOLEAN: Add verbosity'
+  alternatives: -v
+- name: --output
+  type: file
+  description: 'STRING: Output file. If no output file is specified, the output will
+    be written to STDOUT. The result is in tabulate format.'
+  required: yes
+  alternatives: -o
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

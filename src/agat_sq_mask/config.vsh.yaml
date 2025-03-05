@@ -1,0 +1,70 @@
+name: agat_sq_mask
+description: |-
+  The script masks (hard or soft) GFF-denoted segments out of a FASTA format file.
+  It needs 3 input parameters: a gff3 file, a fasta file, and a Mask method.
+  The result is written to the specified output file, or to STDOUT.
+usage: |-
+  agat_sq_mask.pl -g infile.gff -f infile.fasta  (-hm or -sm) [ -o outfile ]
+  agat_sq_mask.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sq_mask.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sq_mask.pl
+arguments:
+- name: --gff
+  type: file
+  description: Input GTF/GFF file.
+  required: yes
+  alternatives:
+  - -g
+  - -ref
+- name: --fasta
+  type: file
+  description: Input fasta file that will be masked
+  required: yes
+  alternatives:
+  - -f
+  - --fa
+- name: -sm
+  type: boolean_true
+  description: SoftMask option =>Sequences masked will be in lowercase
+- name: -hm
+  type: boolean_true
+  description: 'HardMask option => Sequences masked will be replaced by a character.
+    By default the character used is ''n''. But you are allowed to speceify any character
+    of your choice. To use ''z'' instead of ''n'' type: -hm z'
+- name: --output
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives: -o
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

@@ -1,0 +1,67 @@
+name: agat_convert_minimap2_bam2gff
+description: |-
+  The script converts output from minimap2 (bam or sam) into gff file.
+  To get bam from minimap2 use the following command:
+  minimap2 -ax splice:hq genome.fa Asecodes_parviclava.nucest.fa | samtools sort -O BAM -o output.bam
+  To use bam with this script you will need samtools in your path.
+usage: |-
+  agat_convert_minimap2_bam2gff.pl -i infile.bam [ -o outfile ]
+  agat_convert_minimap2_bam2gff.pl -i infile.sam [ -o outfile ]
+  agat_convert_minimap2_bam2gff.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_convert_minimap2_bam2gff.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_convert_minimap2_bam2gff.pl
+arguments:
+- name: --input
+  type: file
+  description: Input file in sam (.sam extension) or bam (.bam extension) format.
+  required: yes
+  alternatives: -i
+- name: --bam
+  type: file
+  description: To force to use the input file as sam file.
+  required: no
+  alternatives: -b
+- name: --sam
+  type: file
+  description: To force to use the input file as sam file.
+  required: no
+  alternatives: -s
+- name: --output
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

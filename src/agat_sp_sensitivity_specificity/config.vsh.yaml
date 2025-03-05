@@ -1,0 +1,70 @@
+name: agat_sp_sensitivity_specificity
+description: |-
+  The script aims to compute the Sensitivity and Specificity in order to assess the quality
+  of an annotation according to a reference (that is supposed to be true high-quality annotation).
+  The Sensitivity (Sn) is the proportion of true predictions compared to the total number of correct genes (including missed predictions)
+  Sn = TP / TP+FN
+  The Specificity (Sp) is the proportion of true predictions among all predicted genes (including incorrectly predicted ones)
+  Sp = TP / TP+FP
+
+  reference annotation:     -------------
+  prediction          :           ------------
+  FN     TP    FP    TN
+
+  Sensitivity and Specificity will be computed for each feature types.
+  (and computed independentaly if part of different Level2 type. i.e. exons Sn Sp
+  for tRNA will not be mixed up with the exon Sn Sp of mRNA exons)
+usage: |-
+  agat_sp_sensitivity_specificity.pl --gff1 infile1.gff --gff2 infile2.gff  [ -o outfile ]
+  agat_sp_sensitivity_specificity.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_sensitivity_specificity.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sp_sensitivity_specificity.pl
+arguments:
+- name: -gff1
+  type: file
+  description: Input GTF/GFF file 1.
+  required: yes
+- name: -gff2
+  type: file
+  description: Input GTF/GFF file 2.
+  required: yes
+- name: --outfile
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --output
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

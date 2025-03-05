@@ -1,0 +1,76 @@
+name: agat_sp_fix_small_exon_from_extremities
+description: |-
+  The script aims to extend the small exons to make them longer.
+  When submitting annotation to ENA they expect exon size of 15 nt minimum.
+  Currently we extend only the exon from extremities, otherwise we risk to break the predicted ORF.
+  /!\ When we extend an exon and the CDS has to be extended too (because is was a partial CDS), we exit;
+usage: |-
+  agat_fix_small_exon_from_extremities.pl -gff infile.gff --fasta genome.fa [ -o outfile ]
+  agat_fix_small_exon_from_extremities.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_fix_small_exon_from_extremities.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_fix_small_exon_from_extremities.pl
+arguments:
+- name: -gff
+  type: file
+  description: Input GTF/GFF file.
+  required: yes
+- name: --fasta
+  type: file
+  description: Genome fasta file The name of the fasta file containing the genome
+    to work with.
+  required: yes
+  alternatives: -fa
+- name: --codon
+  type: integer
+  description: This option allows specifying the codon table to use - It expects an
+    integer (1 by default = standard)
+  required: no
+  alternatives:
+  - --ct
+  - --table
+- name: --size
+  type: integer
+  description: Minimum exon size accepted in nucleotide. All exon below this size
+    will be extended to this size. Default value = 15.
+  required: no
+  alternatives: -s
+- name: --outfile
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --output
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

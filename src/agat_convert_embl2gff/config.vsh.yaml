@@ -1,0 +1,75 @@
+name: agat_convert_embl2gff
+description: The script takes an EMBL file as input, and will translate it in gff
+  format.
+usage: agat_converter_embl2gff.pl --embl infile.embl [ -o outfile ]
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_convert_embl2gff.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_converter_embl2gff.pl
+arguments:
+- name: --embl
+  type: file
+  description: Input EMBL file that will be read
+  required: yes
+- name: --emblmygff3
+  type: file
+  description: Bolean - Means that the EMBL flat file comes from the EMBLmyGFF3 software.
+    This is an EMBL format dedicated for submission and contains particularity to
+    deal with. This parameter is needed to get a proper sequence id in the GFF3 from
+    an embl made with EMBLmyGFF3.
+  required: no
+- name: --primary_tag
+  type: string
+  description: List of "primary tag". Useful to discard or keep specific features.
+    Multiple tags must be coma-separated.
+  required: yes
+  alternatives:
+  - --pt
+  - -t
+- name: -d
+  type: boolean_true
+  description: Bolean - Means that primary tags provided by the option "primary_tag"
+    will be discarded.
+- name: -k
+  type: boolean_true
+  description: Bolean - Means that only primary tags provided by the option "primary_tag"
+    will be kept.
+- name: --outfile
+  type: file
+  description: Output GFF file. If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --output
+  - --out
+  - --gff
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

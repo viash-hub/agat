@@ -1,0 +1,94 @@
+name: agat_sp_manage_attributes
+description: |-
+  The script removes choosen attributes of selected features. It can also create new
+  attribute with 'empty' value, or copy paste an existing attribute using a new specified tag.
+  Attribute in a gff file have this shape (2 attributes here): tag=value;tag=value and
+  are stored within the 9th column.
+usage: |-
+  agat_sp_manage_attributes.pl -gff file.gff  -att locus_tag,product,name/NewName -p level2,cds,exon [ -o outfile ]
+  agat_sp_manage_attributes.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_manage_attributes.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sp_manage_attributes.pl
+arguments:
+- name: --gff
+  type: file
+  description: Input GTF/GFF file.
+  required: yes
+  alternatives: -f
+- name: --type
+  type: string
+  description: 'primary tag option, case insensitive, list. Allow to specied the feature
+    types that will be handled. You can specified a specific feature by given its
+    primary tag name (column 3) as: cds, Gene, MrNa You can specify directly all the
+    feature of a particular level: level2=mRNA,ncRNA,tRNA,etc level3=CDS,exon,UTR,etc
+    By default all feature are taking in account. fill the option by the value "all"
+    will have the same behaviour.'
+  required: yes
+  alternatives:
+  - -p
+  - -l
+- name: --att
+  type: string
+  description: Attributes with the tag specified will be removed from the feature
+    type specified by the option p (primary tag). List of tag must be coma separated.
+    /!\\ You must use "" if name contains spaces. Instead to remove an attribute,
+    you can replace its Tag by a new Tag using this formulation tagName/newTagName.
+    To remove all attributes non mandatory (only ID and Parent are mandatory) you
+    can use the option with <all_attributes> parameter.
+  required: yes
+  alternatives: --tag
+- name: --add
+  type: boolean_true
+  description: Attribute with the tag specified will be added if doesn't exist. The
+    value will be 'empty'.
+- name: --cp
+  type: boolean_true
+  description: 'Bolean. When tags specied are with this form: tagName/newTagName.
+    By using this <cp> parameter, the attribute with the tag tagName will be duplicated
+    with the new tag newTagName if no attribute with the tag newTagName already exits.'
+- name: --overwrite
+  type: boolean_true
+  description: When using -add parameter, if an attribute with the specificed tag
+    already exists, it will not be modified. When using --cp parameter, if an attribute
+    with the specificed newTagName already exists, it will not be modified. So using
+    the --overwrite parameter allows to overwrite the value of the existing attribute.
+- name: --outfile
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --output
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

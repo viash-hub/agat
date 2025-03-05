@@ -1,0 +1,60 @@
+name: agat_convert_sp_gff2zff
+description: |-
+  The script converts GTF/GFF file into zff file a format used by the ab initio
+  tool SNAP. The script produces a .ann file containing the annotation and .dna
+  file containing the fasta file. The .ann and .dna are identicaly sorted by
+  sequence identifier (This is mandatory for usage with fathom).
+usage: |-
+  agat_convert_sp_gff2zff.pl --gff file.gff  --fasta file.fasta [ -o outfile ]
+  agat_convert_sp_gff2zff.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_convert_sp_gff2zff.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_convert_sp_gff2zff.pl
+arguments:
+- name: --gff
+  type: file
+  description: Input GTF/GFF file
+  required: yes
+- name: --fasta
+  type: file
+  description: Input fasta file
+  required: yes
+- name: --outfile
+  type: file
+  description: File prefix where will be written the results (e.g. outfile.ann and
+    outfile.dna). If no output file is specified, the output will be written to STDOUT.
+  required: yes
+  alternatives:
+  - --out
+  - --output
+  - -o
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

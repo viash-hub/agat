@@ -1,0 +1,87 @@
+name: agat_sp_fix_fusion
+description: |-
+  The script looks for other ORF in UTRs (UTR3 and UTR5) of each gene model described in the gff file.
+  Several ouput files will be written if you specify an output.
+  One will contain the gene not modified (intact), one the gene models fixed.
+usage: |-
+  agat_sp_fix_fusion.pl --gff infile.gff --fasta genome.fa [ -o outfile ]
+  agat_sp_fix_fusion.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_fix_fusion.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sp_fix_fusion.pl
+arguments:
+- name: -gff
+  type: file
+  description: Input GTF/GFF file.
+  required: yes
+- name: --fasta
+  type: file
+  description: Input fasta file.
+  required: yes
+  alternatives: -fa
+- name: --codon
+  type: integer
+  description: Codon table to use. [default 1]
+  required: no
+  alternatives:
+  - --ct
+  - --table
+- name: --threshold
+  type: integer
+  description: This is the minimum length of new protein predicted that will be taken
+    in account. By default this value is 100 AA.
+  required: yes
+  alternatives: -t
+- name: --stranded
+  type: boolean_true
+  description: By default we predict protein in UTR3 and UTR5 and in both direction.
+    The fusion assumed can be between gene in same direction and in opposite direction.
+    If RNAseq data used during the annotation was stranded, only fusion of close genes
+    oriented in same direction are expected. In that case this option should be activated.
+    When activated, we will try to predict protein in UTR3 and UTR5 only in the same
+    orientation than the gene investigated.
+  alternatives: -s
+- name: --verbose
+  type: boolean_true
+  description: Output verbose information.
+  alternatives: -v
+  direction: output
+- name: --outfile
+  type: file
+  description: Output GFF file.  If no output file is specified, the output will be
+    written to STDOUT.
+  required: yes
+  alternatives:
+  - -o
+  - --output
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

@@ -1,0 +1,113 @@
+name: agat_sp_prokka_fix_fragmented_gene_annotations
+description: |-
+  The script aims to look at fragmented gene annotations (FRAGS) within prokka annotations.
+  The FRAGS represent two (or more) ORFs that are in close proximity and are annotated
+  with homology to the same gene. In such cases, Prokka ads an _n suffix to the gene ID.
+  For example, a splitted genX can then be found as genX_1 and genX_2 in the GFF.
+  See here for a case: https://github.com/tseemann/prokka/issues/502
+
+  * The script will inform you how many case there is in your annotation.
+  * If you think the FRAGS is due to a sequencing error (frameshift due to short indel),
+  using the --frags parameter will fix the FRAGS if genX_1 and genX_2 are not in the same frame.
+  The gff and the fasta file will be modified. The gene are merged, an insertion of
+  one or two N will be added in between the genes to fix the frameshift.
+  * If you think the FRAGS is not due to a sequencing error, use the --pseudo parameter,
+  the gff will be fix (gene merged) and the agat_pseudo attribute (the value is the position of the codon stop)
+  will be added to the related features.
+  * using --frags and --pseudo is similar to use only --frags, except when no frameshift
+  is found for a detected FRAGS (both gene are in the same frame), the agat_pseudo
+  attribute is also added to the related features.
+
+  How the tool detecte the FRAGS?
+  * Search for cases where contiguous genes have the same name (e.g. lpxA_1 lpxA_2).
+  * If so we look at the size of the protein of each of those genes (lpxA_1 AA=175 ; lpxA_2 AA=116),
+  and compute the size when merged togeter (devoided of the overlap if any) => here 270 AA
+  * Then we look at the size of the protein used to infer the name (lpxA_1 inferred from Q9PIM1 = 263 AA ; lpxA_2 inferred from P0A722 = 262 AA )
+  and compute the average length of the reference protein: here 262AA. We add 20% to the length to be sure to include border cases => 282AA.
+  * Compare the length of the merged proteins (262 AA) against the reference protein length (282).
+  If the the expected protein length (282 AA) is longer we have a FRAGS.
+usage: |-
+  agat_sp_prokka_fragmented_gene_annotations.pl -gff infile.gff --fasta genome.fa --db prokka/prokka_bacteria_sprot.fa  -o outfolder
+  agat_sp_prokka_fragmented_gene_annotations.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_prokka_fix_fragmented_gene_annotations.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sp_prokka_fragmented_gene_annotations.pl
+arguments:
+- name: --gff
+  type: file
+  description: Input genome GTF/GFF file. Mandatory.
+  required: yes
+- name: --fasta
+  type: file
+  description: Input genome fasta file. Mandatory.
+  required: yes
+  alternatives:
+  - -f
+  - --fa
+- name: --db
+  type: file
+  description: Input Uniprot fasta file used by prokka. Mandatory.
+  required: yes
+- name: --frags
+  type: boolean_true
+  description: Merge and fix detected FRAGS if not in the same frame
+- name: --pseudo
+  type: boolean_true
+  description: Merge detected FRAGS and add the agat_pseudo attribute (value will
+    be the location of the first stop codon met).
+- name: --hamap_size
+  type: file
+  description: Some protein function are not infered by Uniprot but by Hamap. In such
+    case the information is retrieved from the web. As hamap provide a family profile,
+    the protein size if a range. "low" option will use the low value of the range,
+    "middle" option will use the average of the range, "high" option will the the
+    high value of the range. Default "high".
+  required: no
+- name: --codon
+  type: integer
+  description: Codon table to use. [default 1]
+  required: no
+  alternatives:
+  - --ct
+  - --table
+- name: --skip_hamap
+  type: boolean_true
+  description: For test purpose it could be useful to skip hamap, because it requires
+    fetching information through internet.
+- name: --output
+  type: string
+  description: Output folder. Mandatory.
+  required: yes
+  alternatives:
+  - -o
+  - --out
+  direction: output
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow

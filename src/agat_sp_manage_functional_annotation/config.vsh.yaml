@@ -1,0 +1,201 @@
+name: agat_sp_manage_functional_annotation
+description: |-
+  The script take a gff3 file as input and blast and/or interpro output in order
+  to attach functional annotation to corresponding features within the gff file.
+
+  >The blast against Protein Database (outfmt 6) allows to fill the field/attribute
+  NAME for gene and PRODUCT for mRNA.
+
+  >The Interpro result (.tsv) file allows to fill the DBXREF field/attribute with
+  pfam, tigr, interpro, GO, KEGG, etc... terms data.
+
+  With the <id> option the script will change all the ID field by an Uniq ID
+  created from the given prefix, a letter to specify the kind of feature (G,T,C,E,U),
+  and the feature number.
+
+  The result is written to the specified output file, or to STDOUT.
+
+  About the TSV format from interproscan:
+  =======================================
+
+  The TSV format presents the match data in columns as follows:
+
+  1.Protein Accession (e.g. P51587)
+  2.Sequence MD5 digest (e.g. 14086411a2cdf1c4cba63020e1622579)
+  3.Sequence Length (e.g. 3418)
+  4.Analysis (e.g. Pfam / PRINTS / Gene3D)
+  5.Signature Accession (e.g. PF09103 / G3DSA:2.40.50.140)
+  6.Signature Description (e.g. BRCA2 repeat profile)
+  7.Start location
+  8.Stop location
+  9.Score - is the e-value (or score) of the match reported by member database method (e.g. 3.1E-52)
+  10.Status - is the status of the match (T: true)
+  11.Date - is the date of the run
+  12.(InterPro annotations - accession (e.g. IPR002093) - optional column; only displayed if -iprlookup option is switched on)
+  13.(InterPro annotations - description (e.g. BRCA2 repeat) - optional column; only displayed if -iprlookup option is switched on)
+  14.(GO annotations (e.g. GO:0005515) - optional column; only displayed if --goterms option is switched on)
+  15.(Pathways annotations (e.g. REACT_71) - optional column; only displayed if --pathways option is switched on)
+
+  P.S: The 9th column contains most of time e-value, but can contain also score (e.g Prosite). To understand the difference: https://myhits.isb-sib.ch/cgi-bin/help?doc=scores.html
+
+  About the outfmt 6 from blast:
+  ==============================
+
+  1.  qseqid  query (e.g., gene) sequence id
+  2.  sseqid  subject (e.g., reference genome) sequence id
+  3.  pident  percentage of identical matches
+  4.  length  alignment length
+  5.  mismatch  number of mismatches
+  6.  gapopen   number of gap openings
+  7.  qstart  start of alignment in query
+  8.  qend  end of alignment in query
+  9.  sstart  start of alignment in subject
+  10.   send  end of alignment in subject
+  11.   evalue  expect value
+  12.   bitscore  bit score
+
+  Currently the best e-value win... That means another hit with a lower e-value
+  (but still over the defined threshold anyway) even if it has a better PE value
+  will not be reported.
+usage: |-
+  agat_sp_manage_functional_annotation.pl -f infile.gff [-b blast_infile][-d uniprot.fasta][-i interpro_infile.tsv][--id ABCDEF][-a][-o output]
+  agat_sp_manage_functional_annotation.pl --help
+links:
+  homepage: https://agat.readthedocs.io
+  documentation: https://agat.readthedocs.io/en/latest/tools/agat_sp_manage_functional_annotation.html
+  issue_tracker: https://github.com/NBISweden/AGAT/issues
+  repository: https://github.com/NBISweden/AGAT
+references:
+  doi: 10.5281/zenodo.3552717
+license: GPL-3.0
+requirements:
+  commands:
+  - agat_sp_manage_functional_annotation.pl
+arguments:
+- name: --reffile
+  type: file
+  description: String - Input GTF/GFF file.
+  required: yes
+  alternatives:
+  - -f
+  - -ref
+  - --gff
+  - --gff3
+- name: --blast
+  type: file
+  description: String - Input blast ( outfmt 6 = tabular ) usually made by blasting
+    the proteins resulting from the GFF/GTF file provided as input and a confident
+    protein database (e.g. Swissprot/Uniprot). The file makse a bridge between the
+    feature ID from the GFF/GTF and the  best protein ID matched in the used database.
+    Thanks to that link the Name and products (sometimes called descriptions) information  will
+    be extracted from the database fasta file and added in the GFF file. You must
+    provide the same database via --db as the one used  to create this blast output
+    file.
+  required: yes
+  alternatives: -b
+  direction: output
+- name: --clean_name
+  type: boolean_true
+  description: Bolean - When activated, if the Name attribute already exists, it we
+    be cleaned. Otherwise Name retrieved by --blast + --db options  will be appended.
+    Default False (Name attribute not cleaned).
+- name: --clean_product
+  type: boolean_true
+  description: Bolean - When activated, if the product attribute already exists, it
+    we be cleaned. Otherwise product retrieved by --blast + --db options  will be
+    appended. Default False (product attribute not cleaned).
+- name: --clean_dbxref
+  type: boolean_true
+  description: Bolean - When activated, if the Dbxref attribute already exists, it
+    we be cleaned. Otherwise Dbxref retrieved by --interpro option  will be appended.
+    Default False (Dbxref attribute not cleaned).
+- name: --clean_ontology
+  type: boolean_true
+  description: Bolean - When activated, if the Ontology_term attribute already exists,
+    it we be cleaned. Otherwise Ontology_term retrieved by --interpro option  will
+    be appended. Default False (Ontology_term attribute not cleaned).
+- name: --db
+  type: file
+  description: String - The fasta file that has been used as DB for the blast. Gene
+    names and products  (sometimes called descriptions) will be fished from this file.
+  required: yes
+  alternatives: -d
+- name: --blast_evalue
+  type: file
+  description: Float - Maximum e-value to keep the annotation from the blast file.
+    By default 1e-6.
+  required: no
+  alternatives: --be
+- name: --pe
+  type: integer
+  description: Integer - The PE (protein existence) in the uniprot header indicates
+    the type of evidence that supports the existence of the protein. You can decide
+    until which protein existence level you want to consider to lift the functional
+    information. Default 5.  1. Experimental evidence at protein level 2. Experimental
+    evidence at transcript level 3. Protein inferred from homology 4. Protein predicted
+    5. Protein uncertain
+  required: no
+- name: --interpro
+  type: file
+  description: String - Input interpro file (.tsv) that will be used to complement
+    the features read from the first file (specified with B<--ref>).
+  required: yes
+  alternatives: -i
+- name: -id
+  type: string
+  description: String - This option will changed the id name. It will create from
+    id prefix (usually 6 letters) given as input, uniq IDs like prefixE00000000001.
+    Where E mean exon. Instead E we can have C for CDS, G for gene, T for mRNA, U
+    for Utr. In the case of discontinuous features (i.e. a single feature that exists
+    over multiple genomic locations) the same ID may appear on multiple lines. All
+    lines that share an ID collectively represent a signle feature.
+  required: yes
+- name: -idau
+  type: string
+  description: Boolean - This option (id all uniq) is similar to -id option but Id
+    of features that share an ID collectively will be change by different and uniq
+    ID.
+  required: yes
+- name: -nb
+  type: integer
+  description: Integer - Usefull only if -id is used. This option is used to define
+    the number that will be used to begin the numbering. By default begin by 1.
+  required: no
+- name: --addgntag
+  type: boolean_true
+  description: Add information in ouptut gff about if gene-name tag ('GN=') is present
+    in blast db fasta ('gn_present=yes') or not ('gn_present=no'). Blast hits without
+    an entry in the blast db will receive 'gn_present=NA'.
+  alternatives: -a
+- name: --output
+  type: file
+  description: String - Output folder name with summary files. If no output file is
+    specified, the output will be written to STDOUT.
+  required: yes
+  alternatives: -o
+  direction: output
+- name: --pcds
+  type: boolean_true
+  description: Boolean - pcds stands for populate cds. It copies the Name, product,
+    Ontology_term, Dbxref and uniprot_id attributes from mRNA to the CDS.
+- name: --config
+  type: file
+  description: 'String - Input agat config file. By default AGAT takes as input agat_config.yaml
+    file from the working directory if any,  otherwise it takes the orignal agat_config.yaml
+    shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
+    The --config option gives you the possibility to use your own AGAT config file
+    (located elsewhere or named differently).'
+  required: no
+  alternatives: -c
+resources:
+- type: bash_script
+  path: script.sh
+engines:
+- type: docker
+  image: quay.io/biocontainers/agat:1.4.2--pl5321hdfd78af_0
+  setup:
+  - type: docker
+    run: 'agat --version | sed ''s/AGAT\s\(.*\)/agat: "\1"/'' > /var/software_versions.txt'
+runners:
+- type: executable
+- type: nextflow
