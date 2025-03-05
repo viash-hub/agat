@@ -23,12 +23,12 @@ arguments:
 - name: -gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
 - name: --dist
   type: integer
   description: The minimum inter-loci distance to allow.  No default (will not apply
     filter by default).
-  required: no
+  required: false
   alternatives: -d
 - name: --add_flag
   type: file
@@ -36,14 +36,14 @@ arguments:
     and add the flag <low_dist> in the gff.(tag = Lvalue or tag = Rvalue  where L
     is left and R right and the value is the distance with accordingle the left or
     right locus)
-  required: no
+  required: false
   alternatives: --af
   direction: output
 - name: --outfile
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --output
@@ -56,7 +56,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

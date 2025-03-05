@@ -31,7 +31,7 @@ arguments:
 - name: --reffile
   type: file
   description: Input GFF3 file that will be read
-  required: yes
+  required: true
   alternatives:
   - -f
   - --gff
@@ -40,7 +40,7 @@ arguments:
   type: string
   description: 'Attribute tag to specify the attribute to analyse (attribute example:
     tag=value).'
-  required: yes
+  required: true
   alternatives: -a
 - name: --type
   type: string
@@ -50,7 +50,7 @@ arguments:
     feature of a particular level: level2=mRNA,ncRNA,tRNA,etc level3=CDS,exon,UTR,etc
     By default all feature are taking into account. fill the option by the value "all"
     will have the same behaviour.'
-  required: yes
+  required: true
   alternatives:
   - -p
   - -l
@@ -58,7 +58,7 @@ arguments:
   type: string
   description: Value(s) to check in the attribute. Case sensitive. List of values
     must be coma separated.
-  required: yes
+  required: true
 - name: --value_insensitive
   type: boolean_true
   description: Bolean. Deactivated by default. When activated the values provided
@@ -68,7 +68,7 @@ arguments:
   description: Bolean. Deactivated by default. By default if the attribute tag on
     which the filter is based is missing, the feature will be written into <output>.
     When activated, such features will be written into a separate file called <output>_na.gff.
-  required: no
+  required: false
   direction: output
 - name: --keep_parental
   type: boolean_true
@@ -80,13 +80,13 @@ arguments:
     these two character >, <, please don't forget to quote the parameter like that
     "<=" otherwise your terminal will complain. Only = and ! tests can be used to
     compare string values.
-  required: no
+  required: false
   alternatives: -t
 - name: --output
   type: file
   description: Output GFF file. If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --config
@@ -96,7 +96,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

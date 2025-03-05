@@ -330,6 +330,12 @@ pwalk(
     if (!dir.exists(dirname(config_path))) {
       dir.create(dirname(config_path), recursive = TRUE)
     }
-    yaml::write_yaml(config, file = config_path)
+    yaml::write_yaml(
+      config,
+      config_path,
+      handlers = list(
+        logical = yaml::verbatim_logical
+      )
+    )
   }
 )

@@ -19,18 +19,18 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives: -f
 - name: --gs
   type: file
   description: This option inform about the genome size in oder to compute more statistics.
     You can give the size in Nucleotide or directly the fasta file.
-  required: yes
+  required: true
   alternatives: -g
 - name: --output
   type: string
   description: Folder where will be written the results. [Default output_functional_statistics]
-  required: no
+  required: false
   alternatives: -o
   direction: output
 - name: --config
@@ -40,7 +40,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

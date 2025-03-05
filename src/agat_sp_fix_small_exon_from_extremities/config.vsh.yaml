@@ -22,18 +22,18 @@ arguments:
 - name: -gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
 - name: --fasta
   type: file
   description: Genome fasta file The name of the fasta file containing the genome
     to work with.
-  required: yes
+  required: true
   alternatives: -fa
 - name: --codon
   type: integer
   description: This option allows specifying the codon table to use - It expects an
     integer (1 by default = standard)
-  required: no
+  required: false
   alternatives:
   - --ct
   - --table
@@ -41,13 +41,13 @@ arguments:
   type: integer
   description: Minimum exon size accepted in nucleotide. All exon below this size
     will be extended to this size. Default value = 15.
-  required: no
+  required: false
   alternatives: -s
 - name: --outfile
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --output
@@ -60,7 +60,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

@@ -32,20 +32,20 @@ arguments:
 - name: --f1
   type: string
   description: 'STRING: Input busco folder1'
-  required: yes
+  required: true
 - name: --f2
   type: string
   description: 'STRING: Input busco folder2'
-  required: yes
+  required: true
 - name: --verbose
   type: integer
   description: 'Integer: For displaying extra information use -v 1.'
-  required: yes
+  required: true
   alternatives: -v
 - name: --output
   type: string
   description: 'STRING: Output folder.'
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --config
@@ -55,7 +55,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

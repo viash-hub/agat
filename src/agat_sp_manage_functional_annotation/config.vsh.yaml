@@ -75,7 +75,7 @@ arguments:
 - name: --reffile
   type: file
   description: String - Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives:
   - -f
   - -ref
@@ -91,7 +91,7 @@ arguments:
     be extracted from the database fasta file and added in the GFF file. You must
     provide the same database via --db as the one used  to create this blast output
     file.
-  required: yes
+  required: true
   alternatives: -b
   direction: output
 - name: --clean_name
@@ -118,13 +118,13 @@ arguments:
   type: file
   description: String - The fasta file that has been used as DB for the blast. Gene
     names and products  (sometimes called descriptions) will be fished from this file.
-  required: yes
+  required: true
   alternatives: -d
 - name: --blast_evalue
   type: file
   description: Float - Maximum e-value to keep the annotation from the blast file.
     By default 1e-6.
-  required: no
+  required: false
   alternatives: --be
 - name: --pe
   type: integer
@@ -134,12 +134,12 @@ arguments:
     information. Default 5.  1. Experimental evidence at protein level 2. Experimental
     evidence at transcript level 3. Protein inferred from homology 4. Protein predicted
     5. Protein uncertain
-  required: no
+  required: false
 - name: --interpro
   type: file
   description: String - Input interpro file (.tsv) that will be used to complement
     the features read from the first file (specified with B<--ref>).
-  required: yes
+  required: true
   alternatives: -i
 - name: -id
   type: string
@@ -149,18 +149,18 @@ arguments:
     for Utr. In the case of discontinuous features (i.e. a single feature that exists
     over multiple genomic locations) the same ID may appear on multiple lines. All
     lines that share an ID collectively represent a signle feature.
-  required: yes
+  required: true
 - name: -idau
   type: string
   description: Boolean - This option (id all uniq) is similar to -id option but Id
     of features that share an ID collectively will be change by different and uniq
     ID.
-  required: yes
+  required: true
 - name: -nb
   type: integer
   description: Integer - Usefull only if -id is used. This option is used to define
     the number that will be used to begin the numbering. By default begin by 1.
-  required: no
+  required: false
 - name: --addgntag
   type: boolean_true
   description: Add information in ouptut gff about if gene-name tag ('GN=') is present
@@ -171,7 +171,7 @@ arguments:
   type: file
   description: String - Output folder name with summary files. If no output file is
     specified, the output will be written to STDOUT.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --pcds
@@ -185,7 +185,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

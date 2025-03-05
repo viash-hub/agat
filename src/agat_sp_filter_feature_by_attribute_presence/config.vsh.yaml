@@ -23,7 +23,7 @@ arguments:
 - name: --reffile
   type: file
   description: Input GFF3 file that will be read
-  required: yes
+  required: true
   alternatives:
   - -f
   - --gff
@@ -36,7 +36,7 @@ arguments:
     feature of a particular level: level2=mRNA,ncRNA,tRNA,etc level3=CDS,exon,UTR,etc
     By default all feature are taking into account. fill the option by the value "all"
     will have the same behaviour.'
-  required: yes
+  required: true
   alternatives:
   - -p
   - -l
@@ -45,7 +45,7 @@ arguments:
   description: String - Attributes tag specified will be used to filter the feature
     type (feature type can also be specified by the option -p).  List of attribute
     tags must be coma separated.
-  required: yes
+  required: true
   alternatives:
   - --att
   - -a
@@ -57,7 +57,7 @@ arguments:
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --config
@@ -67,7 +67,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

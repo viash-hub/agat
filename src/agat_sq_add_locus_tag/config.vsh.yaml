@@ -20,7 +20,7 @@ arguments:
 - name: --input
   type: file
   description: 'STRING: Input GTF/GFF file.'
-  required: yes
+  required: true
   alternatives:
   - --gff
   - --file
@@ -29,7 +29,7 @@ arguments:
   description: Primary tag option, case insensitive, list. Allow to specied the Level1
     feature types that will be handled. By default all feature Level1 are taken into
     account.
-  required: yes
+  required: true
   alternatives:
   - -p
   - -l
@@ -37,7 +37,7 @@ arguments:
   type: string
   description: Locus tag output, by defaut it will be called locus_tag, but using
     this option you can specied the name of this attribute.
-  required: no
+  required: false
   alternatives: --to
   direction: output
 - name: --li
@@ -45,13 +45,13 @@ arguments:
   description: 'Tag input, by default the value of the locus tag attribute will be
     locusX where X is an incremented number. You can use the values of an existing
     attribute instead e.g the ID value: --li ID.'
-  required: yes
+  required: true
   alternatives: --ti
 - name: --output
   type: file
   description: 'STRING: Output file.  If no output file is specified, the output will
     be written to STDOUT. The result is in tabulate format.'
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --quiet
@@ -65,7 +65,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

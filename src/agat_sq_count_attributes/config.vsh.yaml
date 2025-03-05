@@ -20,18 +20,18 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives: -f
 - name: --att
   type: string
   description: The name of the attribute that will be investigated.
-  required: no
+  required: false
   alternatives: --tag
 - name: --outfile
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --output
@@ -44,7 +44,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

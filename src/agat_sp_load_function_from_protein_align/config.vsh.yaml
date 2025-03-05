@@ -27,17 +27,17 @@ arguments:
 - name: --annotation
   type: file
   description: Input gtf/gff file of an annotation.
-  required: yes
+  required: true
   alternatives: -a
 - name: --pgff
   type: file
   description: Input gff file of aligned proteins.
-  required: yes
+  required: true
 - name: --pfasta
   type: file
   description: Input protein fasta file where the extra information will be retrieved
     for each aligned protein.
-  required: yes
+  required: true
 - name: --method
   type: boolean_true
   description: Rule to apply to lift function when a protein map properly. 1) replace  =>
@@ -49,7 +49,7 @@ arguments:
   type: integer
   description: Gene mapping percentage over which a gene must be reported. By default
     the value is 50.
-  required: no
+  required: false
   alternatives:
   - --value
   - -t
@@ -68,7 +68,7 @@ arguments:
   description: Test to apply (> < = >= <=). If you us one of these two character >,
     <, please don't forget to quote you parameter liket that "<=". Else your terminal
     will complain.
-  required: no
+  required: false
 - name: --sp
   type: boolean_true
   description: 'Species, between the set of the best protein aligned we try first
@@ -81,13 +81,13 @@ arguments:
   type: string
   description: 'By default the priority is PE test before species test when both are
     applied. You can flip these two test by activating this option like this: -p species'
-  required: no
+  required: false
   alternatives: -p
 - name: --output
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --out
@@ -99,7 +99,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

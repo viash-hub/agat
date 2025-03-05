@@ -21,7 +21,7 @@ arguments:
 - name: --input
   type: file
   description: 'STRING: Input GTF/GFF file.'
-  required: yes
+  required: true
   alternatives:
   - --gff
   - --file
@@ -30,13 +30,13 @@ arguments:
   description: 'Integer: 1 or 2. 1 will add ### after each new sequence (column1 of
     the gff), while 2 will add the ### after each group of feature (gene). By default
     the value is 1.'
-  required: no
+  required: false
   alternatives: -i
 - name: --output
   type: file
   description: 'STRING: Output file.  If no output file is specified, the output will
     be written to STDOUT. The result is in tabulate format.'
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --config
@@ -46,7 +46,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

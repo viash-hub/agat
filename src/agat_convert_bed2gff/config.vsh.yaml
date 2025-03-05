@@ -22,18 +22,18 @@ arguments:
 - name: --bed
   type: file
   description: Input bed file that will be converted.
-  required: yes
+  required: true
 - name: --source
   type: file
   description: 'The source informs about the tool used to produce the data and is
     stored in 2nd field of a gff file. Example: Stringtie,Maker,Augustus,etc. [default:
     data]'
-  required: no
+  required: false
 - name: --primary_tag
   type: file
   description: 'The primary_tag corresponds to the data type and is stored in 3rd
     field of a gff file. Example: gene,mRNA,CDS,etc.  [default: gene]'
-  required: no
+  required: false
 - name: --inflate_off
   type: boolean_true
   description: By default we inflate the block fields (blockCount, blockSizes, blockStarts)
@@ -44,7 +44,7 @@ arguments:
   type: string
   description: 'Feature type (3rd column in gff) created when inflate parameter activated
     [default: exon].'
-  required: no
+  required: false
 - name: --verbose
   type: boolean_true
   description: add verbosity
@@ -52,7 +52,7 @@ arguments:
   type: file
   description: Output GFF file. If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --output
@@ -66,7 +66,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

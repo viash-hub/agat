@@ -44,18 +44,18 @@ arguments:
 - name: --gff
   type: file
   description: Input genome GTF/GFF file. Mandatory.
-  required: yes
+  required: true
 - name: --fasta
   type: file
   description: Input genome fasta file. Mandatory.
-  required: yes
+  required: true
   alternatives:
   - -f
   - --fa
 - name: --db
   type: file
   description: Input Uniprot fasta file used by prokka. Mandatory.
-  required: yes
+  required: true
 - name: --frags
   type: boolean_true
   description: Merge and fix detected FRAGS if not in the same frame
@@ -70,11 +70,11 @@ arguments:
     the protein size if a range. "low" option will use the low value of the range,
     "middle" option will use the average of the range, "high" option will the the
     high value of the range. Default "high".
-  required: no
+  required: false
 - name: --codon
   type: integer
   description: Codon table to use. [default 1]
-  required: no
+  required: false
   alternatives:
   - --ct
   - --table
@@ -85,7 +85,7 @@ arguments:
 - name: --output
   type: string
   description: Output folder. Mandatory.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --out
@@ -97,7 +97,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

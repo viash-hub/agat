@@ -21,14 +21,14 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives:
   - -g
   - -ref
 - name: --fasta
   type: file
   description: Input fasta file that will be masked
-  required: yes
+  required: true
   alternatives:
   - -f
   - --fa
@@ -44,7 +44,7 @@ arguments:
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --config
@@ -54,7 +54,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

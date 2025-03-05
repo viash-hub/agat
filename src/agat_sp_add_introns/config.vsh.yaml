@@ -19,7 +19,7 @@ arguments:
 - name: -reffile
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives:
   - --gff
   - -f
@@ -27,7 +27,7 @@ arguments:
 - name: --output
   type: file
   description: Output GFF3 file.
-  required: yes
+  required: true
   alternatives:
   - --out
   - -o
@@ -39,7 +39,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

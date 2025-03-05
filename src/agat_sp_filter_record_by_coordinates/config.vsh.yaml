@@ -26,7 +26,7 @@ arguments:
 - name: --input
   type: file
   description: Input GTF/GFF file
-  required: yes
+  required: true
   alternatives:
   - -i
   - --gtf
@@ -37,7 +37,7 @@ arguments:
     per line. Each line must contain 3 fields separated by a tabulation. Field1 is
     the sequence id Field2 is the start coordinate (included) Field3 is the end coordinate
     (included)
-  required: yes
+  required: true
   alternatives:
   - --tsv
   - -r
@@ -50,7 +50,7 @@ arguments:
 - name: --output
   type: string
   description: Output folder.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --verbose
@@ -64,7 +64,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

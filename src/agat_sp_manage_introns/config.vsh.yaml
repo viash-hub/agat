@@ -22,7 +22,7 @@ arguments:
   type: file
   description: 'Input GTF/GFF file. You can use several input files by doing: -f file1
     -f file2 -f file3'
-  required: yes
+  required: true
   alternatives:
   - --gff
   - -f
@@ -31,7 +31,7 @@ arguments:
   type: integer
   description: It the number of break used within the histogram plot. By default it's
     1000. You can modify the value to get something more or less precise.
-  required: yes
+  required: true
   alternatives:
   - -w
   - --window
@@ -41,7 +41,7 @@ arguments:
   type: double
   description: Allows to modify the X values to calculate the percentage of the longest
     introns to remove. By default the value is 1 (We remove 1 percent of the longest).
-  required: no
+  required: false
   alternatives: -x
 - name: --plot
   type: boolean_true
@@ -49,7 +49,7 @@ arguments:
 - name: --output
   type: file
   description: Output gff3 file where the gene incriminated will be write.
-  required: yes
+  required: true
   alternatives:
   - --out
   - -o
@@ -61,7 +61,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

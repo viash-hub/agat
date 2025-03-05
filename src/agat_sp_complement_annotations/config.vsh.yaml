@@ -25,7 +25,7 @@ arguments:
 - name: --ref
   type: file
   description: Input GTF/GFF file used as reference.
-  required: yes
+  required: true
   alternatives:
   - -r
   - -i
@@ -38,19 +38,19 @@ arguments:
     that will be complemented by file2 etc. /!\ The result with -a addfile1 -a addfile2
     will differ to the result from -a addfile2 -a addfile1. So, be aware of what you
     want if you use several addfiles.'
-  required: yes
+  required: true
   alternatives: -a
 - name: --size_min
   type: integer
   description: Option to keep the non-overlping gene only if the CDS size (in nucleotide)
     is over the minimum size defined. Default = 0 that means all of them are kept.
-  required: no
+  required: false
   alternatives: -s
 - name: --outfile
   type: file
   description: Output gff3 containing the reference annotation with all the non-overlapping
     newly added genes from addfiles.gff.
-  required: yes
+  required: true
   alternatives:
   - --out
   - --output
@@ -63,7 +63,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

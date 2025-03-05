@@ -22,16 +22,16 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file
-  required: yes
+  required: true
 - name: --fasta
   type: file
   description: Input fasta file
-  required: yes
+  required: true
 - name: --outfile
   type: file
   description: File prefix where will be written the results (e.g. outfile.ann and
     outfile.dna). If no output file is specified, the output will be written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - --out
   - --output
@@ -44,7 +44,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

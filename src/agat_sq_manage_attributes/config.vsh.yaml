@@ -22,7 +22,7 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives: -f
 - name: --type
   type: string
@@ -31,7 +31,7 @@ arguments:
     primary tag name (column 3) as: cds, Gene, MrNa You can specify directly all the
     feature of a particular level: level2=mRNA,ncRNA,tRNA,etc level3=CDS,exon,UTR,etc
     By default all feature are taking in account.'
-  required: no
+  required: false
   alternatives:
   - -p
   - -l
@@ -43,7 +43,7 @@ arguments:
     you can replace its Tag by a new Tag using this formulation tagName/newTagName.
     To remove all attributes non mandatory (only ID and Parent are mandatory) you
     can use the option with <all_attributes> parameter.
-  required: yes
+  required: true
   alternatives: --tag
 - name: --add
   type: boolean_true
@@ -64,18 +64,18 @@ arguments:
   type: string
   description: String. When a value is provided the attribute is taken into account
     only if the attribute contains (or match) a specific value
-  required: yes
+  required: true
 - name: --strategy
   type: string
   description: String. [Default equal]. Strategy to use when --value parameter is
     in use. Can be equal or match. Equal => the attribute value must be identical.
     Match => the attribute value must match
-  required: no
+  required: false
 - name: --outfile
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --output
@@ -88,7 +88,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

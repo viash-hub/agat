@@ -23,23 +23,23 @@ arguments:
 - name: --input
   type: file
   description: Input file in sam (.sam extension) or bam (.bam extension) format.
-  required: yes
+  required: true
   alternatives: -i
 - name: --bam
   type: file
   description: To force to use the input file as sam file.
-  required: no
+  required: false
   alternatives: -b
 - name: --sam
   type: file
   description: To force to use the input file as sam file.
-  required: no
+  required: false
   alternatives: -s
 - name: --output
   type: file
   description: Output GFF file.  If no output file is specified, the output will be
     written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --out
@@ -51,7 +51,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

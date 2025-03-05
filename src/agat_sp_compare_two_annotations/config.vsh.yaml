@@ -32,18 +32,18 @@ arguments:
 - name: --gff1
   type: file
   description: Input GTF/GFF file1.
-  required: yes
+  required: true
 - name: --gff2
   type: file
   description: Input GTF/GFF file2.
-  required: yes
+  required: true
 - name: --output
   type: file
   description: Output folder.  It contains a report that resume the type and number
     of cases, as well as a file per case type  containing one case per line with the
     list of gene feature's ID (or other type of feature level1) from file1 then file2
     separated by a |.
-  required: yes
+  required: true
   alternatives:
   - -o
   - --out
@@ -64,7 +64,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

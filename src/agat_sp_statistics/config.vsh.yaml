@@ -24,13 +24,13 @@ arguments:
 - name: --gff
   type: file
   description: Input GTF/GFF file.
-  required: yes
+  required: true
   alternatives: -i
 - name: --gs
   type: file
   description: This option inform about the genome size in oder to compute more statistics.
     You can give the size in Nucleotide or directly the fasta file.
-  required: yes
+  required: true
   alternatives:
   - -f
   - -g
@@ -39,7 +39,7 @@ arguments:
   description: Bolean - When this option is used, an histogram of distribution of
     the features will be printed in pdf files in a folder with distribution_plots
     suffix. (d means distribution, p means plot).
-  required: no
+  required: false
   alternatives: -p
 - name: --verbose
   type: boolean_true
@@ -50,13 +50,13 @@ arguments:
   type: file
   description: File where will be written the result. If no output file is specified,
     the output will be written to STDOUT.
-  required: yes
+  required: true
   alternatives: -o
   direction: output
 - name: --percentile
   type: integer
   description: Integer - Percentile to compute. Default is 90.
-  required: no
+  required: false
 - name: --raw
   type: boolean_true
   description: Bolean - When this option is used, the raw data (same as used to create
@@ -76,7 +76,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

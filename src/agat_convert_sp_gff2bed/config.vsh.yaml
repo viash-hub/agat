@@ -38,7 +38,7 @@ arguments:
 - name: --gff
   type: file
   description: Input GFF3 file that will be read
-  required: yes
+  required: true
 - name: --nc
   type: string
   description: STRING - behaviour for non-coding features (e.g. recored wihtout CDS).
@@ -46,18 +46,18 @@ arguments:
     reported in the 7th and 8th columns (a period is reported instead). filter - We
     remove them. transcript - We keep them but values in 7th and 8th columns will
     contains transcript's start and stop.
-  required: no
+  required: false
 - name: --sub
   type: string
   description: 'Define the subfeature (level3, e.g exon,cds,utr,etc...) to report
     as blocks in the bed output. Defaut: exon.'
-  required: no
+  required: false
   direction: output
 - name: --outfile
   type: file
   description: File where will be written the result. If no output file is specified,
     the output will be written to STDOUT.
-  required: yes
+  required: true
   alternatives:
   - --out
   - --output
@@ -70,7 +70,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 resources:
 - type: bash_script

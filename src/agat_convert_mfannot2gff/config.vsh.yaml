@@ -20,14 +20,14 @@ arguments:
 - name: --mfannot
   type: file
   description: The mfannot input file
-  required: yes
+  required: true
   alternatives:
   - -m
   - -i
 - name: --gff
   type: file
   description: the gff output file
-  required: yes
+  required: true
   alternatives:
   - -g
   - -o
@@ -39,7 +39,7 @@ arguments:
     shipped with AGAT. To get the agat_config.yaml locally type: "agat config --expose".
     The --config option gives you the possibility to use your own AGAT config file
     (located elsewhere or named differently).'
-  required: no
+  required: false
   alternatives: -c
 - name: --verbose
   type: boolean_true
